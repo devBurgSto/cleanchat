@@ -1,6 +1,10 @@
 -- Define the path to your universal wordlist file (editable by server operators)
 local universalWordListFilePath = minetest.get_modpath("cleanchat") .. "/curselist.txt"
 
+-- Define a module-level variable to store the universal word list
+local universal_wordlist = {}
+
+
 -- Function to determine if word filtering should be applied
 local function shouldFilter(player_name)
    local player = minetest.get_player_by_name(player_name)
@@ -135,11 +139,20 @@ local function toggleonoff(player_name)
    end
 end
 
+
+-- Function to read the UniversalWordList and store it in the variable
+local function loadUniversalWordList()
+    universal_wordlist = readUniversalWordList()
+end
+
+-- Call the function to load the UniversalWordList at mod startup
+loadUniversalWordList()
+
 -- Register an event handler to listen for chat messages
 minetest.register_on_chat_message(function(name, message)
    if shouldFilter(name) then
        local player_wordlist = getPlayerWordList(name)
-       local universal_wordlist = readUniversalWordList()
+       --local universal_wordlist = readUniversalWordList()
 
        -- Combine the player's personal wordlist and the universal wordlist
        local combined_wordlist = {}
